@@ -6,9 +6,9 @@ public final class ApplicationConstatnts {
     public static final String SYS_PASS = "irrigsyspasswd";
     public static final String BROKER_URL = "ssl://localhost:1883";
     public static final String CLIENT_ID = "IrrigationSysSimulator";
-    public static final String CA_CRT_PATH = "D:\\JavaPrograms\\IrrigationSysSimulator\\src\\main\\java\\com\\ivanbo97\\mqtt\\irrigationsyssimulator\\ca.crt";
-    public static final String CRT_PATH = "D:\\JavaPrograms\\IrrigationSysSimulator\\src\\main\\java\\com\\ivanbo97\\mqtt\\irrigationsyssimulator\\cert.crt";
-    public static final String KEY_PATH = "D:\\JavaPrograms\\IrrigationSysSimulator\\src\\main\\java\\com\\ivanbo97\\mqtt\\irrigationsyssimulator\\key.key";
+    public static final String CA_CRT_PATH = "D:\\JavaPrograms\\ssl_certificates\\ca.crt";
+    public static final String CRT_PATH = "D:\\JavaPrograms\\ssl_certificates\\cert.crt";
+    public static final String KEY_PATH = "D:\\JavaPrograms\\ssl_certificates\\key.key";
 
     public static final String PUMP_MANAGE_TOPIC = "pump";
     public static final String AUTO_MODE1_TOPIC = "automode1";
