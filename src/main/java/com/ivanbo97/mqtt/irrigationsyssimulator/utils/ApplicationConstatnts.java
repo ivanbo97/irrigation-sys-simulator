@@ -24,11 +24,8 @@ public final class ApplicationConstatnts {
     public static final String AUTOMODE2_STATE_TOPIC = "auto2";
 
 
-
     public static final String[] SUBSCRIPTION_TOPICS = {PUMP_MANAGE_TOPIC, "automode1", "automode1/date", "automode1/time",
             "automode1/duration", "automode2", "automode2/moisture"};
 
-    public static final int SUBSCRPTION_TOPICS_QOS[] = {2,2,2,2,2,2,2};
-
-
+    public static final int SUBSCRPTION_TOPICS_QOS[] = {2, 2, 2, 2, 2, 2, 2};
 }
