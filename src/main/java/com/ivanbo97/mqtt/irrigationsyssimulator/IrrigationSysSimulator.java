@@ -28,26 +28,23 @@ public class IrrigationSysSimulator {
     static int moistureOffset = 5;
 
 
-    private static String currentDate;
-    private static String currentTime;
+    public static String currentDate;
+    public static String currentTime;
 
     private static String receivedDateForAutomode1;
     private static String receivedIrrigationDuration;
     private static String receivedStartTime;
     private static String receivedHoldUpMoistureLvl;
 
-
+    private static int desiredMoisture;
     private static Timer delayedStartTaskTime = new Timer();
 
-
     public static void main(String[] args) {
-
         try {
             IrrigationSysSimulator simulator = new IrrigationSysSimulator();
         } catch (MqttException e) {
             e.printStackTrace();
         }
-
     }
 
     public IrrigationSysSimulator() throws MqttException {
@@ -89,8 +86,8 @@ public class IrrigationSysSimulator {
         conOpt.setSocketFactory(sslSocketFactory);
         conOpt.setPassword(SYS_PASS.toCharArray());
         conOpt.setUserName(SYS_USR_NAME);
+        conOpt.setMaxInflight(1000);
 
-       conOpt.setMaxInflight(1000);
         // Construct the MqttClient instance
         client = new MqttAsyncClient(BROKER_URL, CLIENT_ID, dataStore);
 
@@ -122,7 +119,6 @@ public class IrrigationSysSimulator {
             }
         };
         client.connect(conOpt, this, connectionListener);
-
     }
 
     static class AutoMode1TaskTerminator extends TimerTask {
@@ -132,7 +128,6 @@ public class IrrigationSysSimulator {
             delayedStartTaskTime.cancel(); //Terminate the timer thread
         }
     }
-
 
     public static void onReceivedMqttData(String currentTopic, String currentMessage) {
         boolean isAutoMode1On = irrigationSystemState.isAutoMode1On();
@@ -183,6 +178,7 @@ public class IrrigationSysSimulator {
         if (currentTopic.equals(AUTO_MODE2_MOISTURE_TOPIC)) {
             // get desired humidity
             receivedHoldUpMoistureLvl = currentMessage;
+            desiredMoisture = Integer.valueOf(receivedHoldUpMoistureLvl);
         }
     }
 
@@ -240,7 +236,6 @@ public class IrrigationSysSimulator {
         if (receivedDateForAutomode1.equals(currentDate) &&
                 receivedStartTime.equals(currentTime) &&
                 !irrigationSystemState.isPumpRunning()) {
-
             startPump();
             long durationIntervalMs = (60L * 1000L * Long.valueOf(receivedIrrigationDuration));
             delayedStartTaskTime.schedule(new AutoMode1TaskTerminator(), durationIntervalMs);
@@ -253,12 +248,13 @@ public class IrrigationSysSimulator {
     }
 
     public static void holdUpHumidityTask() {
-        int desiredMoisture = Integer.valueOf(receivedHoldUpMoistureLvl);
-        if (currentSoilMoisture <= -moistureOffset) {
+
+        if (currentSoilMoisture <= desiredMoisture - moistureOffset) {
             startPump();
         }
 
         if (currentSoilMoisture >= desiredMoisture) {
+            irrigationSystemState.setAutoMode2On(false);
             stopPump();
         }
     }
