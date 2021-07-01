@@ -9,23 +9,20 @@ import java.util.Calendar;
 
 public class MainSysLoop implements Runnable {
 
-    private static String currentDate;
-
-    private static String currentTime;
 
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
     private Calendar cal = Calendar.getInstance();
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+    private int idxForIncreasingMoisture = 1;
 
     @Override
     public void run() {
-
-
         System.out.println("Publish Messages");
-
-        currentDate = LocalDate.now().format(dateFormatter);
-        currentTime = timeFormatter.format(cal.getTime());
+        cal = Calendar.getInstance();
+        System.out.println("Current Time: " + timeFormatter.format(cal.getTime()));
+        IrrigationSysSimulator.currentDate = LocalDate.now().format(dateFormatter);
+        IrrigationSysSimulator.currentTime = timeFormatter.format(cal.getTime());
 
         // get humidity
 
@@ -35,7 +32,11 @@ public class MainSysLoop implements Runnable {
         // check for automodes
 
         if (IrrigationSysSimulator.getIrrigationSystemState().isPumpRunning()) {
+            if (idxForIncreasingMoisture % 5 == 0) {
+                IrrigationSysSimulator.currentSoilMoisture += 4;
+            }
             IrrigationSysSimulator.currentSoilMoisture += 1;
+            idxForIncreasingMoisture++;
         }
         if (IrrigationSysSimulator.getIrrigationSystemState().isAutoMode1On()) {
             IrrigationSysSimulator.delayedIrrigationStart();
@@ -44,7 +45,5 @@ public class MainSysLoop implements Runnable {
         if (IrrigationSysSimulator.getIrrigationSystemState().isAutoMode2On()) {
             IrrigationSysSimulator.holdUpHumidityTask();
         }
-
-
     }
 }
