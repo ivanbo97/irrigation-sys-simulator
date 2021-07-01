@@ -7,7 +7,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class IrrigationSysCallback implements MqttCallback {
 
-
     public void connectionLost(Throwable throwable) {
         System.out.println("Connection to broker is lost!");
     }
