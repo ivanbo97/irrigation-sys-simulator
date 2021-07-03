@@ -9,11 +9,9 @@ import java.util.Calendar;
 
 public class MainSysLoop implements Runnable {
 
-
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
     private Calendar calendar = Calendar.getInstance();
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
     private int idxForIncreasingMoisture = 1;
 
     @Override
