@@ -11,7 +11,7 @@ public class MainSysLoop implements Runnable {
 
 
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
-    private Calendar cal = Calendar.getInstance();
+    private Calendar calendar = Calendar.getInstance();
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private int idxForIncreasingMoisture = 1;
@@ -19,18 +19,15 @@ public class MainSysLoop implements Runnable {
     @Override
     public void run() {
         System.out.println("Publish Messages");
-        cal = Calendar.getInstance();
-        System.out.println("Current Time: " + timeFormatter.format(cal.getTime()));
+        calendar = Calendar.getInstance();
+        System.out.println("Current Time: " + timeFormatter.format(calendar.getTime()));
         IrrigationSysSimulator.currentDate = LocalDate.now().format(dateFormatter);
-        IrrigationSysSimulator.currentTime = timeFormatter.format(cal.getTime());
-
-        // get humidity
+        IrrigationSysSimulator.currentTime = timeFormatter.format(calendar.getTime());
 
         // publish messages
         IrrigationSysSimulator.publishSysState();
 
         // check for automodes
-
         if (IrrigationSysSimulator.getIrrigationSystemState().isPumpRunning()) {
             if (idxForIncreasingMoisture % 5 == 0) {
                 IrrigationSysSimulator.currentSoilMoisture += 4;
