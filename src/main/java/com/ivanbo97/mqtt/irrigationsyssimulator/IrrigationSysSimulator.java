@@ -62,9 +62,9 @@ public class IrrigationSysSimulator {
         conOpt = new MqttConnectOptions();
         conOpt.setCleanSession(true);
 
-        InputStream caCrtFile = null;
-        InputStream crtFile = null;
-        InputStream keyFile = null;
+        InputStream caCrtFile;
+        InputStream crtFile;
+        InputStream keyFile;
 
         try {
             caCrtFile = new FileInputStream(CA_CRT_PATH);
@@ -101,9 +101,7 @@ public class IrrigationSysSimulator {
                     irrigationSystemState = new IrrigationSystemState();
                     client.subscribe(SUBSCRIPTION_TOPICS, SUBSCRPTION_TOPICS_QOS);
                     System.out.println("Successful subscription to topics! Running main Task...");
-                    // mainTaskSimulation();
-                    // Thread mainTaskThread = new Thread(new MainSysLoop());
-                    // mainTaskThread.start();
+
                     ScheduledExecutorService executor =
                             Executors.newSingleThreadScheduledExecutor();
                     Runnable mainSysTask = new MainSysLoop();
@@ -219,14 +217,14 @@ public class IrrigationSysSimulator {
     private static void startPump() {
         irrigationSystemState.setPumpRunning(true);
         for (int i = 0; i < 600; i++) {
-            //Pump start simulation time
+            //Pump start simulation time delay
         }
     }
 
     private static void stopPump() {
 
         for (int i = 0; i < 300; i++) {
-            //Pump stop simulation time
+            //Pump stop simulation time delay
         }
 
         irrigationSystemState.setPumpRunning(false);
