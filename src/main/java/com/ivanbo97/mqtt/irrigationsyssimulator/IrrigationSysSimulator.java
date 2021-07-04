@@ -56,9 +56,6 @@ public class IrrigationSysSimulator {
         String tmpDir = System.getProperty("java.io.tmpdir");
         MqttDefaultFilePersistence dataStore = new MqttDefaultFilePersistence(tmpDir);
 
-
-        // Construct the object that contains connection parameters
-        // such as cleanSession and LWT
         conOpt = new MqttConnectOptions();
         conOpt.setCleanSession(true);
 
