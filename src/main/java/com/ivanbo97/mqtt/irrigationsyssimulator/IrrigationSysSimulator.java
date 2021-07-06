@@ -39,6 +39,9 @@ public class IrrigationSysSimulator {
     private static int desiredMoisture;
     private static Timer delayedStartTaskTime = new Timer();
 
+    private static String taskStartExecutionTime;
+    private static String taskEndExecutionTime;
+
     public static void main(String[] args) {
         try {
             IrrigationSysSimulator simulator = new IrrigationSysSimulator();
@@ -212,19 +215,20 @@ public class IrrigationSysSimulator {
     }
 
     private static void startPump() {
-        irrigationSystemState.setPumpRunning(true);
         for (int i = 0; i < 600; i++) {
             //Pump start simulation time delay
         }
+        irrigationSystemState.setPumpRunning(true);
+        taskStartExecutionTime = currentTime;
     }
 
     private static void stopPump() {
-
         for (int i = 0; i < 300; i++) {
             //Pump stop simulation time delay
         }
-
         irrigationSystemState.setPumpRunning(false);
+        taskEndExecutionTime = currentTime;
+        publishMessagesForDB();
     }
 
     public static void delayedIrrigationStart() {
@@ -256,5 +260,22 @@ public class IrrigationSysSimulator {
 
     public static IrrigationSystemState getIrrigationSystemState() {
         return irrigationSystemState;
+    }
+
+    private static void publishMessagesForDB() {
+        String irrigationDataForDb = currentDate + ";" +
+                taskStartExecutionTime +
+                ";" +
+                taskEndExecutionTime +
+                ";"
+                + currentSoilMoisture;
+
+        MqttMessage messageForDB = new MqttMessage(irrigationDataForDb.getBytes());
+
+        try {
+            client.publish("dbdata", messageForDB);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 }
