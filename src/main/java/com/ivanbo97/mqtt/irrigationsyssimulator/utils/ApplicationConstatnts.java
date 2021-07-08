@@ -22,6 +22,7 @@ public final class ApplicationConstatnts {
     public static final String PUMP_STATE_TOPIC = "pumpstate";
     public static final String AUTOMODE1_STATE_TOPIC = "auto1";
     public static final String AUTOMODE2_STATE_TOPIC = "auto2";
+    public static final String TEMPERATURE_TOPIC = "temperature";
 
 
     public static final String[] SUBSCRIPTION_TOPICS = {PUMP_MANAGE_TOPIC, "automode1", "automode1/date", "automode1/time",
