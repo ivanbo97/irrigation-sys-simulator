@@ -204,11 +204,15 @@ public class IrrigationSysSimulator {
         String pumpState = irrigationSystemState.isPumpRunning() ? "on" : "off";
         MqttMessage pumpStateMsg = new MqttMessage(pumpState.getBytes());
 
+        String currentTemperature = "28";
+        MqttMessage temperatureMessage = new MqttMessage(currentTemperature.getBytes());
+
         try {
             client.publish(MOISTURE_VALUE_TOPIC, moistureValMsg);
             client.publish(PUMP_STATE_TOPIC, pumpStateMsg);
             client.publish(AUTOMODE1_STATE_TOPIC, autoMode1StateMsg);
             client.publish(AUTOMODE2_STATE_TOPIC, autoMode2StateMsg);
+            client.publish(TEMPERATURE_TOPIC,temperatureMessage);
         } catch (MqttException e) {
             e.printStackTrace();
         }
