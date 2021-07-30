@@ -25,19 +25,20 @@ public class MainSysLoop implements Runnable {
         // publish messages
         IrrigationSysSimulator.publishSysState();
 
+        IrrigationSystemState currentSystemState = IrrigationSysSimulator.getIrrigationSystemState();
         // check for automodes
-        if (IrrigationSysSimulator.getIrrigationSystemState().isPumpRunning()) {
+        if (currentSystemState.isPumpRunning()) {
             if (idxForIncreasingMoisture % 5 == 0) {
                 IrrigationSysSimulator.currentSoilMoisture += 4;
             }
             IrrigationSysSimulator.currentSoilMoisture += 1;
             idxForIncreasingMoisture++;
         }
-        if (IrrigationSysSimulator.getIrrigationSystemState().isAutoMode1On()) {
+        if (currentSystemState.isAutoMode1On()) {
             IrrigationSysSimulator.delayedIrrigationStart();
         }
 
-        if (IrrigationSysSimulator.getIrrigationSystemState().isAutoMode2On()) {
+        if (currentSystemState.isAutoMode2On()) {
             IrrigationSysSimulator.holdUpHumidityTask();
         }
     }
