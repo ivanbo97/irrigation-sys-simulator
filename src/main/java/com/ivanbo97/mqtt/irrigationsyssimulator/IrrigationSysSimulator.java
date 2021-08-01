@@ -92,8 +92,10 @@ public class IrrigationSysSimulator {
         client = new MqttAsyncClient(BROKER_URL, CLIENT_ID, dataStore);
 
         // Set this wrapper as the callback handler
+        System.out.println("Mqtt client init");
         IrrigationSysCallback mqttCallback = new IrrigationSysCallback();
         client.setCallback(mqttCallback);
+
         IMqttActionListener connectionListener = new IMqttActionListener() {
             public void onSuccess(IMqttToken iMqttToken) {
                 System.out.println("Connected successfully to broker. Subscription initiated...");
@@ -113,7 +115,8 @@ public class IrrigationSysSimulator {
             }
 
             public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-
+                throwable.printStackTrace();
+                System.out.println("Mqtt Connection Failure: " );
             }
         };
         client.connect(conOpt, this, connectionListener);
