@@ -5,6 +5,6 @@ need for creating this simulator came during the development of an Android app r
 which are executed on embedded device's side(for more information you can check the above mentioned Android app's repository:
 https://github.com/ivanbo97/plants-irrigation-app.git).
 
-#Tech Stack
+# Tech Stack
 
 Java, MQTT, SSL
