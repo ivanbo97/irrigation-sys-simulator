@@ -116,7 +116,7 @@ public class IrrigationSysSimulator {
 
             public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
                 throwable.printStackTrace();
-                System.out.println("Mqtt Connection Failure: " );
+                System.out.println("Mqtt Connection Failure: ");
             }
         };
         client.connect(conOpt, this, connectionListener);
@@ -167,7 +167,7 @@ public class IrrigationSysSimulator {
         }
 
         if (currentTopic.equals(AUTO_MODE2_TOPIC) && currentMessage.equals("on")) {
-            irrigationSystemState.setAutoMode2On(true);
+            irrigationSystemState.setRequestForMode2Sent(true);
             return;
         }
 
@@ -207,7 +207,7 @@ public class IrrigationSysSimulator {
         String pumpState = irrigationSystemState.isPumpRunning() ? "on" : "off";
         MqttMessage pumpStateMsg = new MqttMessage(pumpState.getBytes());
 
-        String currentTemperature = "28";
+        String currentTemperature = "17";
         MqttMessage temperatureMessage = new MqttMessage(currentTemperature.getBytes());
 
         try {
@@ -215,7 +215,7 @@ public class IrrigationSysSimulator {
             client.publish(PUMP_STATE_TOPIC, pumpStateMsg);
             client.publish(AUTOMODE1_STATE_TOPIC, autoMode1StateMsg);
             client.publish(AUTOMODE2_STATE_TOPIC, autoMode2StateMsg);
-            client.publish(TEMPERATURE_TOPIC,temperatureMessage);
+            client.publish(TEMPERATURE_TOPIC, temperatureMessage);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -255,14 +255,17 @@ public class IrrigationSysSimulator {
 
     public static void holdUpHumidityTask() {
 
-        if (currentSoilMoisture <= desiredMoisture - moistureOffset) {
+        if (currentSoilMoisture < desiredMoisture) {
+            irrigationSystemState.setAutoMode2On(true);
             startPump();
+            return;
         }
 
-        if (currentSoilMoisture >= desiredMoisture) {
+        if (currentSoilMoisture >= desiredMoisture && irrigationSystemState.isAutoMode2On()) {
             irrigationSystemState.setAutoMode2On(false);
             stopPump();
         }
+        irrigationSystemState.setRequestForMode2Sent(false);
     }
 
     public static IrrigationSystemState getIrrigationSystemState() {
