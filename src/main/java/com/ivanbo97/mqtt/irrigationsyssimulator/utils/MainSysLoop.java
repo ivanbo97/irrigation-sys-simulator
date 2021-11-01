@@ -29,7 +29,7 @@ public class MainSysLoop implements Runnable {
         // check for automodes
         if (currentSystemState.isPumpRunning()) {
             if (idxForIncreasingMoisture % 5 == 0) {
-                IrrigationSysSimulator.currentSoilMoisture += 4;
+                IrrigationSysSimulator.currentSoilMoisture += 2;
             }
             IrrigationSysSimulator.currentSoilMoisture += 1;
             idxForIncreasingMoisture++;
@@ -38,7 +38,7 @@ public class MainSysLoop implements Runnable {
             IrrigationSysSimulator.delayedIrrigationStart();
         }
 
-        if (currentSystemState.isAutoMode2On()) {
+        if(currentSystemState.isRequestForMode2Sent()){
             IrrigationSysSimulator.holdUpHumidityTask();
         }
     }
