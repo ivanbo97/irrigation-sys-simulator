@@ -54,7 +54,7 @@ public class IrrigationSysSimulator {
 
         //This sample stores in a temporary directory... where messages temporarily
         // stored until the message has been delivered to the server.
-        //..a real application ought to store them somewhere
+        //a real application ought to store them somewhere
         // where they are not likely to get deleted or tampered with
         String tmpDir = System.getProperty("java.io.tmpdir");
         MqttDefaultFilePersistence dataStore = new MqttDefaultFilePersistence(tmpDir);
